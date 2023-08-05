@@ -26,3 +26,9 @@
 - [x] Add selectable multiple choice answers beneath the card
    - [x] Change the background color of the multiple choice answers when clicked to indicate whether the question waanswered correctly
 - [x] Further customize and style the card
+
+      Here's a walkthrough of implemented user stories:
+
+<img src='![VIDEO-2023-08-04-16-41-48](https://github.com/itzmars/FlashcardAppli/assets/134649410/5233c8b9-4f01-4bd5-adc8-d8b5b852547a)
+'>
+
