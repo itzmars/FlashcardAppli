@@ -1,11 +1,7 @@
 ## FlashcardApp
 
-📝 `NOTE:` Paste the README templates for each subsequent lab here at the top, (i.e. lab 2, 3, 4). This will show a history of your development process including which users tories you completed and how your app looked and functioned at each step.
-
-## Lab 2
-
 ### App Description
-`TODO://` Add app description
+This is a mobile app build in Kotlin language with Android Studio.
 
 ### App Walk-though
 <img src="file:///C:/Users/Hardelson/Downloads/VIDEO-2023-08-04-16-41-48.gif" width=200><br>
