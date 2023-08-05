@@ -13,15 +13,69 @@
         android:layout_height="200dp"
         android:gravity="center"
         android:text="Who is the 44th President of the United States?"
+        android:background="@drawable/card_background"
+        android:elevation="5dp"
+        android:textColor="#ffffff"
         android:textSize="40sp" />
 
-    <TextView
-        android:id="@+id/flashcard_answer"
+<!--    <TextView-->
+<!--        android:id="@+id/flashcard_answer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="Barack Obama"-->
+<!--        android:background="#ffff00"-->
+<!--        android:textColor="#0000FF"-->
+<!--        android:visibility="invisible"-->
+<!--        android:textSize="40sp" />-->
+
+    <TextView android:id="@+id/answer1"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
+        android:text="Bill Clinton"
+        android:layout_below="@+id/flashcard_question"
+        android:background="#fbceb1"
+        android:gravity="center"
+        android:layout_margin="7dp"
+        android:textSize="30sp"/>
+
+    <TextView android:id="@+id/answer2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Georges H. Washington"
+        android:layout_below="@+id/answer1"
+        android:background="#fbceb1"
+        android:gravity="center"
+        android:layout_margin="7dp"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/answer3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/answer2"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="7dp"
+        android:background="#fbceb1"
         android:gravity="center"
         android:text="Barack Obama"
-        android:visibility="invisible"
-        android:textSize="40sp" />
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/eye_off_lined"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/eye_lined"/>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/eye_off_lined"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:visibility="invisible"-->
+<!--        android:src="@drawable/eye_off"/>-->
 
 </RelativeLayout >
