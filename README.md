@@ -4,7 +4,7 @@
 This is a mobile app build in Kotlin language with Android Studio.
 
 ### App Walk-though
-<img src="file:///C:/Users/Hardelson/Downloads/VIDEO-2023-08-04-16-41-48.gif" width=200><br>
+<img src="https://submissions.us-east-1.linodeobjects.com/mobile_app_design/7y69y1t0.gif" width=200><br>
 
 `TODO://` In the User stories section below, add an `x` between the `-[ ]` like this `- [x]` for any user story you complete. (☝️ Remove this paragraph after after checking off user stories)
 
