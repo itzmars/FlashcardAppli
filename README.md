@@ -8,9 +8,7 @@
 `TODO://` Add app description
 
 ### App Walk-though
-`TODO://` Add the URL to your animated app walk-though `gif` in the image tag below. Make sure the gif actually renders and animates when viewing this README. (☝️ Remove this paragraph after after adding gif)
-
-<img src="YOUR_GIF_URL_HERE" width=200><br>
+<img src="file:///C:/Users/Hardelson/Downloads/VIDEO-2023-08-04-16-41-48.gif" width=200><br>
 
 `TODO://` In the User stories section below, add an `x` between the `-[ ]` like this `- [x]` for any user story you complete. (☝️ Remove this paragraph after after checking off user stories)
 
@@ -27,7 +25,6 @@
    - [x] Change the background color of the multiple choice answers when clicked to indicate whether the question waanswered correctly
 - [x] Further customize and style the card
 
-      Here's a walkthrough of implemented user stories:
 
 <img src='![VIDEO-2023-08-04-16-41-48](https://github.com/itzmars/FlashcardAppli/assets/134649410/5233c8b9-4f01-4bd5-adc8-d8b5b852547a)
 '>
