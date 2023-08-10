@@ -1,4 +1,4 @@
-# Lab 2 : Flashcard App (Unobliviate)
+# Lab 2 : Flashcard App 
 
 ## Required
 - [x] User can click on a ‘+’ button that takes the user to new ‘Add Card Screen’
