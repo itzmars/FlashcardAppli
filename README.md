@@ -14,4 +14,4 @@
 - [ ] User can also enter multiple choice answers when creating a card
 - [ ] App is further styled and customized!
 
-<img src="" width="200" height="400" />  
+<img src="XRecorder_09082023_152538.gif" width="200" height="400" />  
