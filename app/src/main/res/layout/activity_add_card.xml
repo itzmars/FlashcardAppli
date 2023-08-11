@@ -8,40 +8,64 @@
     tools:context=".AddCardActivity">
 
     <EditText
-        android:id="@+id/editTextQuestion"
+        android:id="@+id/edit_text_question"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:hint="Enter The Question Here" />
 
     <EditText
         android:id="@+id/editTextAnswer"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_text_question"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:hint="Enter The Answer Here" />
+
+    <EditText
+        android:id="@+id/edit_text_wrong_answer1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextAnswer"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:hint="Enter The Answer Here" />
+
+    <EditText
+        android:id="@+id/edit_text_wrong_answer2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_below="@+id/editTextQuestion"
+        android:layout_below="@+id/edit_text_wrong_answer1"
         android:hint="Enter The Answer Here" />
 
     <ImageView
         android:id="@+id/save_card"
-        android:layout_width="99dp"
-        android:layout_height="97dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="294dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="273dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/save" />
 
     <ImageView
         android:id="@+id/cancel_card"
-        android:layout_width="99dp"
-        android:layout_height="97dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="19dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/cancel" />
 
 

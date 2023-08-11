@@ -20,20 +20,68 @@
         android:id="@+id/flashcard_answer"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:text="Barack Obama"
         android:visibility="invisible"
         android:textSize="40sp" />
 
+    <TextView
+        android:id="@+id/answer1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/flashcard_question"
+        android:layout_margin="20dp"
+        android:background="#2980B9"
+        android:gravity="center"
+        android:text="Bill Clinton"
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/answer2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="Barack Obama"
+        android:textColor="#ffffff"
+        android:background="#2980B9"
+        android:layout_below="@+id/answer1"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/answer3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="Joe Biden"
+        android:textColor="#ffffff"
+        android:background="#2980B9"
+        android:layout_below="@+id/answer2"
+        android:textSize="30sp" />
+
+
+    <ImageView
+        android:id="@+id/edit_card"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="282dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/edit" />
 
     <ImageView
         android:id="@+id/add_card"
-        android:layout_width="99dp"
-        android:layout_height="97dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="19dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/add" />
 
 </RelativeLayout >

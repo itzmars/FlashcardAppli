@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
@@ -22,7 +23,11 @@ class MainActivity : AppCompatActivity() {
         val flashcardQuestion = findViewById<TextView>(R.id.flashcard_question)
         val flashcardAnswer = findViewById<TextView>(R.id.flashcard_answer)
         val addCard = findViewById<ImageView>(R.id.add_card)
+        val editCard = findViewById<ImageView>(R.id.edit_card)
 
+        val guessAnswer1 = findViewById<TextView>(R.id.answer1)
+        val guessAnswer2 = findViewById<TextView>(R.id.answer2)
+        val guessAnswer3 = findViewById<TextView>(R.id.answer3)
 
 
         flashcardQuestion.setOnClickListener{
@@ -36,14 +41,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            Snackbar.make(findViewById(R.id.flashcard_question),
+                "Card successful created",
+                Snackbar.LENGTH_SHORT)
+                .show()
 
-            // This code is executed in StartingActivity after we come back from EndingActivity
-
-            // This extracts any data that was passed back from EndingActivity
             val data: Intent? = result.data
-            if (data != null) { // Check that we have data returned
-                val textQuestion = data.getStringExtra("question") // 'string1' needs to match the key we used when we put the string in the Intent
+            if (data != null) {
+
+                val textQuestion = data.getStringExtra("question")
                 val textAnswer = data.getStringExtra("answer")
+
+                
+
+                guessAnswer1.text = data.getStringExtra("wrongAnswer2")
+                guessAnswer3.text = data.getStringExtra("wrongAnswer1")
+                guessAnswer2.text = data.getStringExtra("answer")
 
                 flashcardQuestion.text = textQuestion
                 flashcardAnswer.text = textAnswer
@@ -58,28 +71,38 @@ class MainActivity : AppCompatActivity() {
         }
 
         addCard.setOnClickListener {
+
+
+
             val intent = Intent(this, AddCardActivity::class.java)
-            // Launch EndingActivity with the resultLauncher so we can execute more code
-            // once we come back here from EndingActivity
+
+            resultLauncher.launch(intent)
+
+        }
+
+        editCard.setOnClickListener{
+            val intent = Intent(this, AddCardActivity::class.java)
+            intent.putExtra("questionTxt", flashcardQuestion.text);
+            intent.putExtra("answerTxt", flashcardAnswer.text);
+            intent.putExtra("wrongAnswer1", guessAnswer1.text);
+            intent.putExtra("wrongAnswer2", guessAnswer3.text);
             resultLauncher.launch(intent)
         }
 
+        guessAnswer1.setOnClickListener{
 
-//
-//        flashcardAnswer1.setOnClickListener{
-//            flashcardAnswer1.setBackgroundColor(getResources().getColor(R.color.red, null))
-//            flashcardAnswer3.setBackgroundColor(getResources().getColor(R.color.green, null))
-//        }
-//
-//        flashcardAnswer2.setOnClickListener{
-//            flashcardAnswer2.setBackgroundColor(getResources().getColor(R.color.red, null))
-//            flashcardAnswer3.setBackgroundColor(getResources().getColor(R.color.green, null))
-//        }
-//
-//        flashcardAnswer3.setOnClickListener{
-//            flashcardAnswer3.setBackgroundColor(getResources().getColor(R.color.green, null))
-//        }
-//
+        }
+
+        guessAnswer2.setOnClickListener{
+
+        }
+
+        guessAnswer3.setOnClickListener{
+
+        }
+
+
+
 //        toggleChoiceView.setOnClickListener{
 //            isShowingAnswers = !isShowingAnswers
 //
