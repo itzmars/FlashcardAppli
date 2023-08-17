@@ -17,14 +17,14 @@ class AddCardActivity : AppCompatActivity() {
         val cancelCard = findViewById<ImageView>(R.id.cancel_card)
         val questionText = findViewById<EditText>(R.id.edit_text_question)
         val answerText = findViewById<EditText>(R.id.editTextAnswer)
-        val wrongAns1= findViewById<EditText>(R.id.edit_text_wrong_answer1)
-        val wrongAns2= findViewById<EditText>(R.id.edit_text_wrong_answer2)
+//        val wrongAns1= findViewById<EditText>(R.id.edit_text_wrong_answer1)
+//        val wrongAns2= findViewById<EditText>(R.id.edit_text_wrong_answer2)
 
 
         questionText.setText(intent.getStringExtra("questionTxt"))
         answerText.setText(intent.getStringExtra("answerTxt"))
-        wrongAns1.setText(intent.getStringExtra("wrongAnswer1"))
-        wrongAns2.setText(intent.getStringExtra("wrongAnswer2"))
+//        wrongAns1.setText(intent.getStringExtra("wrongAnswer1"))
+//        wrongAns2.setText(intent.getStringExtra("wrongAnswer2"))
 
 
 
@@ -47,18 +47,18 @@ class AddCardActivity : AppCompatActivity() {
                 answerText.text.toString()
             )
 
-            data.putExtra(
-                "wrongAnswer1",
-                wrongAns1.text.toString()
-            )
-
-            data.putExtra(
-                "wrongAnswer2",
-                wrongAns2.text.toString()
-            )
+//            data.putExtra(
+//                "wrongAnswer1",
+//                wrongAns1.text.toString()
+//            )
+//
+//            data.putExtra(
+//                "wrongAnswer2",
+//                wrongAns2.text.toString()
+//            )
 
             setResult(RESULT_OK, data) // set result code and bundle data for response
-            if(questionText.text.toString() == "" || answerText.text.toString() == ""|| wrongAns1.text.toString() == ""|| wrongAns1.text.toString() == ""){
+            if(questionText.text.toString() == "" || answerText.text.toString() == ""){
                 Toast.makeText(applicationContext, "Must Both Enter Question And Answer", Toast.LENGTH_SHORT).show()
             }
             else{
