@@ -6,7 +6,7 @@
 Allow user to create a Flashcard
 
 ### App Walk-though
-<img src="" width=200><br>
+<img src="XRecorder_17082023_164835.gif" width=200><br>
 
 ## Required
 - [x] User can create a card and still see their created card when the app is relaunched.
