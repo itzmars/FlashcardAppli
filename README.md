@@ -12,6 +12,10 @@ Allow user to create a Flashcard
 - [x] User can create a card and still see their created card when the app is relaunched.
 - [x] User can create muliple cards and browse through all created cards
 
+### App Walk-though
+<img src=".gif" width=200><br>
+
+
 ## Optional
 - [ ] User can delete a card and no longer see it in their deck anymore
 - [ ] Flashcards are shown in random order instead of the order they were created in
