@@ -17,15 +17,14 @@ class AddCardActivity : AppCompatActivity() {
         val cancelCard = findViewById<ImageView>(R.id.cancel_card)
         val questionText = findViewById<EditText>(R.id.edit_text_question)
         val answerText = findViewById<EditText>(R.id.editTextAnswer)
-//        val wrongAns1= findViewById<EditText>(R.id.edit_text_wrong_answer1)
-//        val wrongAns2= findViewById<EditText>(R.id.edit_text_wrong_answer2)
+        val wrongAns1= findViewById<EditText>(R.id.edit_text_wrong_answer1)
+        val wrongAns2= findViewById<EditText>(R.id.edit_text_wrong_answer2)
 
 
         questionText.setText(intent.getStringExtra("questionTxt"))
         answerText.setText(intent.getStringExtra("answerTxt"))
-//        wrongAns1.setText(intent.getStringExtra("wrongAnswer1"))
-//        wrongAns2.setText(intent.getStringExtra("wrongAnswer2"))
-
+        wrongAns1.setText(intent.getStringExtra("wrongAnswer1"))
+        wrongAns2.setText(intent.getStringExtra("wrongAnswer2"))
 
 
         cancelCard.setOnClickListener {
@@ -34,38 +33,30 @@ class AddCardActivity : AppCompatActivity() {
 
 
         saveCard.setOnClickListener {
-            val data = Intent() // create a new Intent, this is where we will put our data
+            val data = Intent()
 
-            data.putExtra(
-                "question",
-                questionText.text.toString()
+            val question = questionText.text.toString()
+            val answer = answerText.text.toString()
+            val wrongAnswer = wrongAns1.text.toString()
+            val wrongAnswer2 = wrongAns2.text.toString()
 
-            ) // puts one string into the Intent, with the key as 'string1'
+            if (question.isNotEmpty() && answer.isNotEmpty() ) {
 
-            data.putExtra(
-                "answer",
-                answerText.text.toString()
-            )
+                data.putExtra("question", question)
+                data.putExtra("answer", answer)
+                data.putExtra("wrong1", wrongAnswer)
+                data.putExtra("wrong2", wrongAnswer2)
 
-//            data.putExtra(
-//                "wrongAnswer1",
-//                wrongAns1.text.toString()
-//            )
-//
-//            data.putExtra(
-//                "wrongAnswer2",
-//                wrongAns2.text.toString()
-//            )
-
-            setResult(RESULT_OK, data) // set result code and bundle data for response
-            if(questionText.text.toString() == "" || answerText.text.toString() == ""){
-                Toast.makeText(applicationContext, "Must Both Enter Question And Answer", Toast.LENGTH_SHORT).show()
+                setResult(RESULT_OK, data) // set result code and bundle data for response
+                finish() // closes the activity, pass data to parent
             }
-            else{
-
-                finish()
-
-
+            else {
+                // show an error message in a Toast
+                Toast.makeText(
+                    applicationContext,
+                    "Must enter both Question and Answers!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         }

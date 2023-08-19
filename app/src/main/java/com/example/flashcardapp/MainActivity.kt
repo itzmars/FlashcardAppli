@@ -1,5 +1,6 @@
 package com.example.flashcardapp
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var flashcardDatabase: FlashcardDatabase
     private var allFlashcards = mutableListOf<Flashcard>()
+    private lateinit var cardToEdit: Flashcard
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,25 +29,24 @@ class MainActivity : AppCompatActivity() {
         var currentCardDisplayedIndex = 0
 
 
-
         val flashcardQuestion = findViewById<TextView>(R.id.flashcard_question)
         val flashcardAnswer = findViewById<TextView>(R.id.flashcard_answer)
         val addCard = findViewById<ImageView>(R.id.add_card)
         val nextCard = findViewById<ImageView>(R.id.next_card)
-//        val editCard = findViewById<ImageView>(R.id.edit_card)
-//
-//        val guessAnswer1 = findViewById<TextView>(R.id.answer1)
-//        val guessAnswer2 = findViewById<TextView>(R.id.answer2)
-//        val guessAnswer3 = findViewById<TextView>(R.id.answer3)
+        val deleteCard = findViewById<ImageView>(R.id.delete_card)
+        val editCard = findViewById<ImageView>(R.id.edit_card)
+
+        val guessAnswer1 = findViewById<TextView>(R.id.answer1)
+        val guessAnswer2 = findViewById<TextView>(R.id.answer2)
+        val guessAnswer3 = findViewById<TextView>(R.id.answer3)
 
         flashcardDatabase = FlashcardDatabase(this)
         allFlashcards = flashcardDatabase.getAllCards().toMutableList()
-        
-        
+
 
         if (allFlashcards.size > 0) {
-            findViewById<TextView>(R.id.flashcard_question).text = allFlashcards[0].question
-            findViewById<TextView>(R.id.flashcard_answer).text = allFlashcards[0].answer
+            flashcardQuestion.text = allFlashcards[0].question
+            flashcardAnswer.text = allFlashcards[0].answer
         }
 
 
@@ -65,7 +66,11 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            currentCardDisplayedIndex++
+            fun getRandomNumber(minNumber: Int, maxNumber: Int): Int {
+                return (minNumber..maxNumber).random() // generated random from 0 to 10 included
+            }
+
+            currentCardDisplayedIndex = getRandomNumber(0, allFlashcards.size - 1)
 
             if(currentCardDisplayedIndex >= allFlashcards.size) {
                 Snackbar.make(
@@ -78,12 +83,16 @@ class MainActivity : AppCompatActivity() {
 
             // set the question and answer TextViews with data from the database
             allFlashcards = flashcardDatabase.getAllCards().toMutableList()
-            val (question, answer) = allFlashcards[currentCardDisplayedIndex]
+            val (question, answer, wrongAns1, wrongAns2) = allFlashcards[currentCardDisplayedIndex]
 
-            findViewById<TextView>(R.id.flashcard_answer).text = answer
-            findViewById<TextView>(R.id.flashcard_question).text = question
-
+            flashcardQuestion.text = question
+            flashcardAnswer.text = answer
+            guessAnswer1.text = wrongAns1
+            guessAnswer2.text = answer
+            guessAnswer3.text = wrongAns2
         }
+
+
 
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
@@ -99,6 +108,8 @@ class MainActivity : AppCompatActivity() {
 
                 val question = extras.getString("question")
                 val answer = extras.getString("answer")
+                val wrongAns1 = extras.getString("wrong1")
+                val wrongAns2 = extras.getString("wrong2")
 
 
                 Log.i("MainActivity", "question: $question")
@@ -108,15 +119,19 @@ class MainActivity : AppCompatActivity() {
                 flashcardQuestion.text = question
                 flashcardAnswer.text = answer
 
+                guessAnswer1.text = wrongAns1
+                guessAnswer2.text = answer
+                guessAnswer3.text = wrongAns2
+
+
                 // Save newly created flashcard to database
                 if (question != null && answer != null) {
-                    flashcardDatabase.insertCard(Flashcard(question, answer))
+                    flashcardDatabase.insertCard(Flashcard(question, answer, wrongAns1, wrongAns2))
                     // Update set of flashcards to include new card
                     allFlashcards = flashcardDatabase.getAllCards().toMutableList()
                 } else {
                     Log.e("TAG", "Missing question or answer to input into database. Question is $question and answer is $answer")
                 }
-
             }
             else {
                 Log.i("MainActivity", "Returned null data from AddCardActivity")
@@ -124,67 +139,118 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        val editResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+
+
+                if (data != null) { // Check that we have data returned
+                    // grab the data passed from AddCardActivity
+                    // set the TextViews to show the EDITED question and answer
+
+                    val question = data.extras!!.getString("question")
+                    val answer = data.extras!!.getString("answer")
+
+                    val wrongAns1 = data.extras!!.getString("wrong1")
+                    val wrongAns2 = data.extras!!.getString("wrong2")
+
+                    flashcardQuestion.text = question
+                    flashcardAnswer.text = answer
+
+                    guessAnswer1.text = wrongAns1
+                    guessAnswer2.text = answer
+                    guessAnswer3.text = wrongAns2
+
+
+                    if (question != null && answer != null) {
+
+                        cardToEdit.question = question
+                        cardToEdit.answer = answer
+
+                        flashcardDatabase.updateCard(cardToEdit)
+
+                        allFlashcards = flashcardDatabase.getAllCards().toMutableList()
+                    } else {
+                        Log.e(
+                            "TAG",
+                            "Missing question or answer to input into database. Question is $question and answer is $answer"
+                        )
+                    }
+
+
+                } else {
+                    Log.i("MainActivity", "Returned null data from AddCardActivity")
+                }
+            }
+        }
+
+
         addCard.setOnClickListener {
-
-
             val intent = Intent(this, AddCardActivity::class.java)
-
             resultLauncher.launch(intent)
 
         }
 
-//        editCard.setOnClickListener{
-//            val intent = Intent(this, AddCardActivity::class.java)
-//            intent.putExtra("questionTxt", flashcardQuestion.text);
-//            intent.putExtra("answerTxt", flashcardAnswer.text);
-//            intent.putExtra("wrongAnswer1", guessAnswer1.text);
-//            intent.putExtra("wrongAnswer2", guessAnswer3.text);
-//            resultLauncher.launch(intent)
-//        }
+       deleteCard.setOnClickListener{
+           val flashcardQuestionToDelete = flashcardQuestion.text.toString()
+           flashcardDatabase.deleteCard(flashcardQuestionToDelete)
 
-//        guessAnswer1.setOnClickListener{
-//
-//        }
-//
-//        guessAnswer2.setOnClickListener{
-//
-//        }
-//
-//        guessAnswer3.setOnClickListener{
-//
-//        }
+           if (currentCardDisplayedIndex > 0){
+               currentCardDisplayedIndex--
+           }
+           else{
+               currentCardDisplayedIndex = 0
+           }
 
 
+           allFlashcards = flashcardDatabase.getAllCards().toMutableList()
 
-//        toggleChoiceView.setOnClickListener{
-//            isShowingAnswers = !isShowingAnswers
-//
-//            if(!isShowingAnswers) {
-//                toggleChoiceView.setImageResource(R.drawable.eye_lined)
-//                hideAnswers()
-//            }
-//            else{
-//                toggleChoiceView.setImageResource(R.drawable.eye_off)
-//                showAnswers()
-//            }
-//        }
-//
+           if (allFlashcards.size <= 0){
+               findViewById<TextView>(R.id.flashcard_question).text = "Add a flashcard"
+           }
+           else{
+               val (question, answer) = allFlashcards[currentCardDisplayedIndex]
+
+               flashcardQuestion.text = question
+               flashcardAnswer.text = answer
+
+           }
+       }
+
+
+        editCard.setOnClickListener{
+            for(flashcard in allFlashcards){
+                if(flashcard.question == flashcardQuestion.text){
+                    cardToEdit = Flashcard(flashcard.question, flashcard.answer,flashcard.wrongAnswer1, flashcard.wrongAnswer2, flashcard.uuid )
+                }
+            }
+
+            val intent = Intent(this, AddCardActivity::class.java)
+            intent.putExtra("questionTxt", flashcardQuestion.text);
+            intent.putExtra("answerTxt", guessAnswer2.text);
+            intent.putExtra("wrongAnswer1", flashcardAnswer.text);
+            intent.putExtra("wrongAnswer2", guessAnswer3.text);
+            editResultLauncher.launch(intent)
+
+        }
+
+        guessAnswer1.setOnClickListener{
+
+        }
+
+        guessAnswer2.setOnClickListener{
+
+        }
+
+        guessAnswer3.setOnClickListener{
+
+        }
+
 
 
 
     }
-
-//    private fun showAnswers() {
-//        findViewById<TextView>(R.id.answer1).visibility = View.VISIBLE
-//        findViewById<TextView>(R.id.answer2).visibility = View.VISIBLE
-//        findViewById<TextView>(R.id.answer3).visibility = View.VISIBLE
-//    }
-//
-//    private fun hideAnswers() {
-//        findViewById<TextView>(R.id.answer1).visibility = View.INVISIBLE
-//        findViewById<TextView>(R.id.answer2).visibility = View.INVISIBLE
-//        findViewById<TextView>(R.id.answer3).visibility = View.INVISIBLE
-//    }
 
 
 }
