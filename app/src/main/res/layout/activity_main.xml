@@ -5,26 +5,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#007fff"
     tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="15"
+        android:textColor="#fff"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/flashcard_question"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:gravity="center"
-        android:text="Who is the 44th President of the United States"
+        android:textColor="#fff"
+        android:layout_margin="10dp"
+        android:background="@drawable/card_background"
+        android:layout_below="@+id/timer"
         android:elevation="5dp"
-        android:textSize="40sp" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/flashcard_answer"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_margin="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/card_background"
+        android:elevation="5dp"
         android:gravity="center"
-        android:text="Barack Obama"
-        android:visibility="invisible"
-        android:textSize="40sp" />
+        android:textColor="#fff"
+        android:textSize="30sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/answer1"
@@ -32,10 +53,9 @@
         android:layout_height="60dp"
         android:layout_below="@+id/flashcard_question"
         android:layout_margin="10dp"
-        android:background="#2980B9"
+        android:background="@drawable/answer_card"
         android:gravity="center"
-        android:text="Bill Clinton"
-        android:textColor="#ffffff"
+        android:textColor="#007fff"
         android:textSize="30sp" />
 
     <TextView
@@ -44,51 +64,52 @@
         android:layout_height="60dp"
         android:layout_below="@+id/answer1"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:layout_marginTop="41dp"
-        android:layout_marginBottom="20dp"
-        android:background="#2980B9"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/answer_card"
         android:gravity="center"
-        android:text="Barack Obama"
-        android:textColor="#ffffff"
+        android:textColor="#007fff"
         android:textSize="30sp" />
 
     <TextView
         android:id="@+id/answer3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:text="Joe Biden"
-        android:textColor="#ffffff"
-        android:background="#2980B9"
         android:layout_below="@+id/answer2"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/answer_card"
+        android:gravity="center"
+        android:textColor="#007fff"
         android:textSize="30sp" />
 
 
     <ImageView
         android:id="@+id/next_card"
-        android:layout_width="79dp"
-        android:layout_height="109dp"
+        android:layout_width="85dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/add_card"
         android:layout_below="@+id/answer3"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="180dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="66dp"
         android:src="@drawable/next" />
 
     <ImageView
         android:id="@+id/delete_card"
-        android:layout_width="74dp"
-        android:layout_height="75dp"
+        android:layout_width="111dp"
+        android:layout_height="84dp"
         android:layout_below="@+id/answer3"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="169dp"
-        android:layout_marginBottom="187dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="180dp"
+        android:layout_toStartOf="@+id/next_card"
         android:src="@drawable/delete" />
 
     <ImageView
@@ -101,7 +122,6 @@
         android:layout_marginEnd="282dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/edit" />
-
 
 
     <ImageView

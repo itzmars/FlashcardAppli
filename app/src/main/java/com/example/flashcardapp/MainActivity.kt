@@ -5,29 +5,35 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 
+
 class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
 
-
     lateinit var flashcardDatabase: FlashcardDatabase
-    private var allFlashcards = mutableListOf<Flashcard>()
     private lateinit var cardToEdit: Flashcard
+    private var allFlashcards = mutableListOf<Flashcard>()
+    private var currentCardDisplayedIndex = 0
+    var countDownTimer: CountDownTimer? = null
+    var isShowingAnswer = false
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        var currentCardDisplayedIndex = 0
-
 
         val flashcardQuestion = findViewById<TextView>(R.id.flashcard_question)
         val flashcardAnswer = findViewById<TextView>(R.id.flashcard_answer)
@@ -36,23 +42,70 @@ class MainActivity : AppCompatActivity() {
         val deleteCard = findViewById<ImageView>(R.id.delete_card)
         val editCard = findViewById<ImageView>(R.id.edit_card)
 
+        // Calculate the translation values
+        val fromXDelta = 0f // Start at the current position (no translation)
+        val toXDelta = -100f // Translate 100 pixels to the left (adjust as needed)
+        val fromYDelta = 0f // No vertical translation
+        val toYDelta = 0f // No vertical translation
+
+
         val guessAnswer1 = findViewById<TextView>(R.id.answer1)
         val guessAnswer2 = findViewById<TextView>(R.id.answer2)
         val guessAnswer3 = findViewById<TextView>(R.id.answer3)
 
+
         flashcardDatabase = FlashcardDatabase(this)
+        flashcardDatabase.initFirstCard()
         allFlashcards = flashcardDatabase.getAllCards().toMutableList()
+
+
+
+
+        countDownTimer = object : CountDownTimer(1600, 1000){
+            override fun onTick(millisUntilFinished: Long) {
+                findViewById<TextView>(R.id.timer).text = "" + millisUntilFinished / 1000
+            }
+
+            override fun onFinish() {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+
+
 
 
         if (allFlashcards.size > 0) {
             flashcardQuestion.text = allFlashcards[0].question
             flashcardAnswer.text = allFlashcards[0].answer
+            guessAnswer1.text = allFlashcards[0].wrongAnswer1
+            guessAnswer2.text = allFlashcards[0].answer
+            guessAnswer3.text = allFlashcards[0].wrongAnswer2
+
         }
 
 
         flashcardQuestion.setOnClickListener{
-            flashcardAnswer.visibility = View.VISIBLE
+
+            val cx = flashcardAnswer.width / 2
+            val cy = flashcardAnswer.height / 2
+
+            // get the final radius for the clipping circle
+
+            // get the final radius for the clipping circle
+            val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
+
+            // create the animator for this view (the start radius is zero)
+
+            // create the animator for this view (the start radius is zero)
+            val anim = ViewAnimationUtils.createCircularReveal(flashcardAnswer, cx, cy, 0f, finalRadius)
+
             flashcardQuestion.visibility = View.INVISIBLE
+            flashcardAnswer.visibility = View.VISIBLE
+
+            anim.duration = 1000
+            anim.start()
         }
 
         flashcardAnswer.setOnClickListener{
@@ -60,7 +113,9 @@ class MainActivity : AppCompatActivity() {
             flashcardQuestion.visibility = View.VISIBLE
         }
 
+
         nextCard.setOnClickListener{
+
             if (allFlashcards.size == 0) {
                 // return here, so that the rest of the code in this onClickListener doesn't execute
                 return@setOnClickListener
@@ -72,18 +127,33 @@ class MainActivity : AppCompatActivity() {
 
             currentCardDisplayedIndex = getRandomNumber(0, allFlashcards.size - 1)
 
-            if(currentCardDisplayedIndex >= allFlashcards.size) {
-                Snackbar.make(
-                    findViewById<TextView>(R.id.flashcard_question), // This should be the TextView for displaying your flashcard question
-                    "You've reached the end of the cards, going back to start.",
-                    Snackbar.LENGTH_SHORT)
-                    .show()
-                currentCardDisplayedIndex = 0
-            }
+            val currentCardOutAnimation = TranslateAnimation(0f, -flashcardQuestion.width.toFloat(), 0f, 0f)
+            currentCardOutAnimation.duration = 500
+
+                    currentCardOutAnimation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {
+                        // this method is called when the animation first starts
+                    }
+
+                    override fun onAnimationEnd(animation: Animation?) {
+                        // this method is called when the animation is finished playing
+                        showNextCard()
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation?) {
+                        // we don't need to worry about this method
+                    }
+                })
+            flashcardQuestion.startAnimation(currentCardOutAnimation)
+
+
 
             // set the question and answer TextViews with data from the database
             allFlashcards = flashcardDatabase.getAllCards().toMutableList()
             val (question, answer, wrongAns1, wrongAns2) = allFlashcards[currentCardDisplayedIndex]
+
+
+
 
             flashcardQuestion.text = question
             flashcardAnswer.text = answer
@@ -118,7 +188,6 @@ class MainActivity : AppCompatActivity() {
 
                 flashcardQuestion.text = question
                 flashcardAnswer.text = answer
-
                 guessAnswer1.text = wrongAns1
                 guessAnswer2.text = answer
                 guessAnswer3.text = wrongAns2
@@ -129,21 +198,20 @@ class MainActivity : AppCompatActivity() {
                     flashcardDatabase.insertCard(Flashcard(question, answer, wrongAns1, wrongAns2))
                     // Update set of flashcards to include new card
                     allFlashcards = flashcardDatabase.getAllCards().toMutableList()
-                } else {
+                }
+                else {
                     Log.e("TAG", "Missing question or answer to input into database. Question is $question and answer is $answer")
                 }
             }
             else {
                 Log.i("MainActivity", "Returned null data from AddCardActivity")
             }
-
         }
 
-        val editResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
+        val editResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
-
 
                 if (data != null) { // Check that we have data returned
                     // grab the data passed from AddCardActivity
@@ -157,11 +225,9 @@ class MainActivity : AppCompatActivity() {
 
                     flashcardQuestion.text = question
                     flashcardAnswer.text = answer
-
                     guessAnswer1.text = wrongAns1
                     guessAnswer2.text = answer
                     guessAnswer3.text = wrongAns2
-
 
                     if (question != null && answer != null) {
 
@@ -171,26 +237,20 @@ class MainActivity : AppCompatActivity() {
                         flashcardDatabase.updateCard(cardToEdit)
 
                         allFlashcards = flashcardDatabase.getAllCards().toMutableList()
-                    } else {
+                    }
+                    else {
                         Log.e(
                             "TAG",
                             "Missing question or answer to input into database. Question is $question and answer is $answer"
                         )
                     }
-
-
-                } else {
+                }
+                else {
                     Log.i("MainActivity", "Returned null data from AddCardActivity")
                 }
             }
         }
 
-
-        addCard.setOnClickListener {
-            val intent = Intent(this, AddCardActivity::class.java)
-            resultLauncher.launch(intent)
-
-        }
 
        deleteCard.setOnClickListener{
            val flashcardQuestionToDelete = flashcardQuestion.text.toString()
@@ -218,6 +278,12 @@ class MainActivity : AppCompatActivity() {
            }
        }
 
+        addCard.setOnClickListener {
+            val intent = Intent(this, AddCardActivity::class.java)
+            resultLauncher.launch(intent)
+            overridePendingTransition(R.anim.right_in, R.anim.left_out)
+        }
+
 
         editCard.setOnClickListener{
             for(flashcard in allFlashcards){
@@ -232,7 +298,6 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("wrongAnswer1", flashcardAnswer.text);
             intent.putExtra("wrongAnswer2", guessAnswer3.text);
             editResultLauncher.launch(intent)
-
         }
 
         guessAnswer1.setOnClickListener{
@@ -249,7 +314,34 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    }
 
+    private fun showNextCard() {
+        val currentCardIndex = currentCardDisplayedIndex
+        val nextCardIndex = (currentCardIndex + 1) % allFlashcards.size
+        val nextCard = allFlashcards[nextCardIndex]
+
+        findViewById<TextView>(R.id.flashcard_question).text = nextCard.question
+        findViewById<TextView>(R.id.flashcard_answer).text = nextCard.answer
+        findViewById<TextView>(R.id.answer1).text = nextCard.wrongAnswer1
+        findViewById<TextView>(R.id.answer2).text = nextCard.answer
+        findViewById<TextView>(R.id.answer3).text = nextCard.wrongAnswer2
+
+
+
+
+        findViewById<TextView>(R.id.flashcard_answer).visibility = View.INVISIBLE
+        findViewById<TextView>(R.id.flashcard_question).visibility = View.VISIBLE
+        isShowingAnswer = false
+
+        currentCardDisplayedIndex = nextCardIndex
+
+
+    }
+
+    private fun startTimer() {
+        countDownTimer?.cancel()
+        countDownTimer?.start()
     }
 
 

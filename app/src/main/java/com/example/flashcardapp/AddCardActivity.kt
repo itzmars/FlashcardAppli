@@ -33,6 +33,7 @@ class AddCardActivity : AppCompatActivity() {
 
 
         saveCard.setOnClickListener {
+
             val data = Intent()
 
             val question = questionText.text.toString()
@@ -61,4 +62,6 @@ class AddCardActivity : AppCompatActivity() {
 
         }
     }
+
+
 }
