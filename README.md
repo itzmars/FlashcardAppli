@@ -11,9 +11,17 @@ Allow user to create card and get through existing card
 - [x] User sees flashcards animating in / out when the 'next' button is tapped
 
 ## Optional
-- [ ] Extra styling is added!
-- [ ] User sees a countdown timer for each question
-- [ ] User sees a 'card flip' animation when the card is tapped
+
+### App Description
+Allow user to create card and get through existing card
+
+<img src="### App Description
+Allow user to create card and get through existing card
+
+<img src="XRecorder_25082023_164816.gif" width=200><br>
+- [x] Extra styling is added!
+- [x] User sees a countdown timer for each question
+- [x] User sees a 'card flip' animation when the card is tapped
 - [ ] User sees a celebration animation with confetti when they answer a question correctly
 
 ## Lab 3
