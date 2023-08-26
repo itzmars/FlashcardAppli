@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cardToEdit: Flashcard
     private var allFlashcards = mutableListOf<Flashcard>()
     private var currentCardDisplayedIndex = 0
-    var countDownTimer: CountDownTimer? = null
+    private var countDownTimer: CountDownTimer? = null
     var isShowingAnswer = false
 
 
@@ -54,6 +54,8 @@ class MainActivity : AppCompatActivity() {
         val guessAnswer3 = findViewById<TextView>(R.id.answer3)
 
 
+
+
         flashcardDatabase = FlashcardDatabase(this)
         flashcardDatabase.initFirstCard()
         allFlashcards = flashcardDatabase.getAllCards().toMutableList()
@@ -61,19 +63,17 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        countDownTimer = object : CountDownTimer(1600, 1000){
+        countDownTimer = object : CountDownTimer(16000, 1000){
             override fun onTick(millisUntilFinished: Long) {
                 findViewById<TextView>(R.id.timer).text = "" + millisUntilFinished / 1000
             }
 
             override fun onFinish() {
-                TODO("Not yet implemented")
             }
 
         }
 
-
-
+        startTimer()
 
 
         if (allFlashcards.size > 0) {
@@ -87,30 +87,48 @@ class MainActivity : AppCompatActivity() {
 
 
         flashcardQuestion.setOnClickListener{
+            findViewById<View>(R.id.flashcard_question).cameraDistance = 25000F
+            findViewById<View>(R.id.flashcard_answer).cameraDistance = 25000F
 
-            val cx = flashcardAnswer.width / 2
-            val cy = flashcardAnswer.height / 2
+            flashcardQuestion.animate()
+                .rotationY(90F)
+                .setDuration(200)
+                .withEndAction(
+                    Runnable {
+                        flashcardQuestion.visibility = View.INVISIBLE
+                        findViewById<View>(R.id.flashcard_answer).visibility = View.VISIBLE
+                        // second quarter turn
+                        findViewById<View>(R.id.flashcard_answer).rotationY = -90f
+                        findViewById<View>(R.id.flashcard_answer).animate()
+                            .rotationY(0f)
+                            .setDuration(200)
+                            .start()
+                    }
+                ).start()
 
-            // get the final radius for the clipping circle
-
-            // get the final radius for the clipping circle
-            val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
-
-            // create the animator for this view (the start radius is zero)
-
-            // create the animator for this view (the start radius is zero)
-            val anim = ViewAnimationUtils.createCircularReveal(flashcardAnswer, cx, cy, 0f, finalRadius)
-
-            flashcardQuestion.visibility = View.INVISIBLE
-            flashcardAnswer.visibility = View.VISIBLE
-
-            anim.duration = 1000
-            anim.start()
         }
 
         flashcardAnswer.setOnClickListener{
-            flashcardAnswer.visibility = View.INVISIBLE
-            flashcardQuestion.visibility = View.VISIBLE
+
+            findViewById<View>(R.id.flashcard_answer).cameraDistance = 25000F
+            findViewById<View>(R.id.flashcard_question).cameraDistance = 25000F
+
+            flashcardAnswer.animate()
+                .rotationY(90F)
+                .setDuration(200)
+                .withEndAction(
+                    Runnable {
+                        flashcardAnswer.visibility = View.INVISIBLE
+                        findViewById<View>(R.id.flashcard_question).visibility = View.VISIBLE
+                        // second quarter turn
+                        findViewById<View>(R.id.flashcard_question).rotationY = -90f
+                        findViewById<View>(R.id.flashcard_question).animate()
+                            .rotationY(0f)
+                            .setDuration(200)
+                            .start()
+                    }
+                ).start()
+
         }
 
 
@@ -120,6 +138,8 @@ class MainActivity : AppCompatActivity() {
                 // return here, so that the rest of the code in this onClickListener doesn't execute
                 return@setOnClickListener
             }
+
+            startTimer()
 
             fun getRandomNumber(minNumber: Int, maxNumber: Int): Int {
                 return (minNumber..maxNumber).random() // generated random from 0 to 10 included
@@ -301,15 +321,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         guessAnswer1.setOnClickListener{
-
+            findViewById<View>(R.id.answer1).setBackgroundColor(resources.getColor(R.color.red, null))
+            findViewById<View>(R.id.answer2).setBackgroundColor(resources.getColor(R.color.green, null))
         }
 
         guessAnswer2.setOnClickListener{
-
+            findViewById<View>(R.id.answer2).setBackgroundColor(resources.getColor(R.color.green, null))
         }
 
         guessAnswer3.setOnClickListener{
-
+            findViewById<View>(R.id.answer3).setBackgroundColor(resources.getColor(R.color.red, null))
+            findViewById<View>(R.id.answer2).setBackgroundColor(resources.getColor(R.color.green, null))
         }
 
 
