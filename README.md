@@ -12,13 +12,7 @@ Allow user to create card and get through existing card
 
 ## Optional
 
-### App Description
-Allow user to create card and get through existing card
-
-<img src="### App Description
-Allow user to create card and get through existing card
-
-<img src="XRecorder_25082023_164816.gif" width=200><br>
+<img src="XRecorder_26082023_135638.gif" width=200><br>
 - [x] Extra styling is added!
 - [x] User sees a countdown timer for each question
 - [x] User sees a 'card flip' animation when the card is tapped
