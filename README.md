@@ -16,7 +16,7 @@ Allow user to create card and get through existing card
 - [x] Extra styling is added!
 - [x] User sees a countdown timer for each question
 - [x] User sees a 'card flip' animation when the card is tapped
-- [ ] User sees a celebration animation with confetti when they answer a question correctly
+- [x] User sees a celebration animation with confetti when they answer a question correctly
 
 ## Lab 3
 
