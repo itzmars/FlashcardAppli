@@ -2,21 +2,28 @@ package com.example.flashcardapp
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.shapes.Shape
+import android.icu.lang.UCharacter.DecompositionType.CIRCLE
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.util.Size
 import android.view.View
-import android.view.ViewAnimationUtils
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.CIRCLE
 import com.google.android.material.snackbar.Snackbar
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import nl.dionsegijn.konfetti.xml.KonfettiView
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var currentCardDisplayedIndex = 0
     private var countDownTimer: CountDownTimer? = null
     var isShowingAnswer = false
+    private lateinit var celebrationView : KonfettiView
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -42,11 +50,8 @@ class MainActivity : AppCompatActivity() {
         val deleteCard = findViewById<ImageView>(R.id.delete_card)
         val editCard = findViewById<ImageView>(R.id.edit_card)
 
-        // Calculate the translation values
-        val fromXDelta = 0f // Start at the current position (no translation)
-        val toXDelta = -100f // Translate 100 pixels to the left (adjust as needed)
-        val fromYDelta = 0f // No vertical translation
-        val toYDelta = 0f // No vertical translation
+
+
 
 
         val guessAnswer1 = findViewById<TextView>(R.id.answer1)
@@ -54,12 +59,11 @@ class MainActivity : AppCompatActivity() {
         val guessAnswer3 = findViewById<TextView>(R.id.answer3)
 
 
-
-
         flashcardDatabase = FlashcardDatabase(this)
         flashcardDatabase.initFirstCard()
         allFlashcards = flashcardDatabase.getAllCards().toMutableList()
 
+        celebrationView = findViewById(R.id.konfettiView)
 
 
 
@@ -148,7 +152,7 @@ class MainActivity : AppCompatActivity() {
             currentCardDisplayedIndex = getRandomNumber(0, allFlashcards.size - 1)
 
             val currentCardOutAnimation = TranslateAnimation(0f, -flashcardQuestion.width.toFloat(), 0f, 0f)
-            currentCardOutAnimation.duration = 500
+            currentCardOutAnimation.duration = 1000
 
                     currentCardOutAnimation.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationStart(animation: Animation?) {
@@ -304,7 +308,6 @@ class MainActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.right_in, R.anim.left_out)
         }
 
-
         editCard.setOnClickListener{
             for(flashcard in allFlashcards){
                 if(flashcard.question == flashcardQuestion.text){
@@ -326,7 +329,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         guessAnswer2.setOnClickListener{
-            findViewById<View>(R.id.answer2).setBackgroundColor(resources.getColor(R.color.green, null))
+
+            val party = Party(
+                speed = 0f,
+                maxSpeed = 30f,
+                damping = 0.9f,
+                spread = 360,
+                colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+                emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(100),
+                position = Position.Relative(0.5, 0.3)
+            )
+
+
+            celebrationView.start(party)
+
+            findViewById<TextView>(R.id.answer2).setBackgroundColor(resources.getColor(R.color.green, null))
         }
 
         guessAnswer3.setOnClickListener{
@@ -348,8 +365,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.answer1).text = nextCard.wrongAnswer1
         findViewById<TextView>(R.id.answer2).text = nextCard.answer
         findViewById<TextView>(R.id.answer3).text = nextCard.wrongAnswer2
-
-
 
 
         findViewById<TextView>(R.id.flashcard_answer).visibility = View.INVISIBLE
